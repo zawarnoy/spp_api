@@ -3,7 +3,9 @@ package spp.lab.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import spp.lab.models.State;
 import spp.lab.models.Subscription;
+import spp.lab.models.State;
 import spp.lab.reposository.BaseRepository;
 
 import java.util.Optional;
@@ -30,6 +32,7 @@ public class SubscriptionController {
         n.setPrice(Long.valueOf(price));
         n.setDuration(Long.valueOf(duration));
         n.setVisitCount(Long.valueOf(visit_count));
+        n.setState(State.ACTIVE);
         subscriptionRepository.save(n);
         return "{ status : success }";
     }
@@ -39,7 +42,7 @@ public class SubscriptionController {
     String delete(@PathVariable(value = "id") String id) {
         Optional<Subscription> subscription = subscriptionRepository.findById(Long.valueOf(id));
         if (subscription != null) {
-            subscriptionRepository.delete(subscription.get());
+            this.softDelete(subscription.get());
             return "{ status : success }";
         } else {
             return "{ status : error, value : can't find user }";
@@ -49,7 +52,7 @@ public class SubscriptionController {
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
     Iterable<Subscription> getAll() {
-        return subscriptionRepository.findAll();
+        return subscriptionRepository.findAllByState(State.ACTIVE);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/{id}")
@@ -81,8 +84,12 @@ public class SubscriptionController {
     @RequestMapping("/{id}")
     public @ResponseBody
     Optional<Subscription> show(@PathVariable(value = "id") String id) {
-        return subscriptionRepository.findById(Long.valueOf(id));
+        return subscriptionRepository.findOneByIdAndState(Long.valueOf(id), State.ACTIVE);
     }
 
+    private void softDelete(Subscription subscription) {
+        subscription.setState(State.DELETED);
+        subscriptionRepository.save(subscription);
+    }
 
 }

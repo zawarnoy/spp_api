@@ -21,6 +21,12 @@ public abstract class BaseService<T extends SafeDeleteEntity, Rep extends BaseRe
     @Autowired
     protected Rep repository;
 
+    public BaseService()
+    {
+
+    }
+
+
     public String restoreFromTrash(T entity) {
             entity.setState(State.ACTIVE);
             return "{ status : success }";
@@ -29,7 +35,6 @@ public abstract class BaseService<T extends SafeDeleteEntity, Rep extends BaseRe
     public String delete(T entity)
     {
             entity.setState(State.DELETED);
-            repository.delete(entity);
             repository.save(entity);
             return "{ status : success }";
     }

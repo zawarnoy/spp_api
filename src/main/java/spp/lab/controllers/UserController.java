@@ -10,6 +10,7 @@ import spp.lab.Service.UserService;
 import spp.lab.models.Role;
 import spp.lab.models.User;
 import spp.lab.reposository.UserRepository;
+
 import java.util.Optional;
 
 @CrossOrigin
@@ -22,7 +23,8 @@ public class UserController {
 
     private UserService userService = new UserService();
 
-    @Transactional void save(User user){
+    @Transactional
+    void save(User user) {
         userRepository.save(user);
     }
 
@@ -32,17 +34,17 @@ public class UserController {
             @RequestParam("name") String name,
             @RequestParam("login") String login,
             @RequestParam("password") String password,
-            @RequestParam(name = "trainer_id", required = false) String trainer_id) {
+            @RequestParam(name = "trainer_id", required = false) String trainer_id,
+            @RequestParam(name = "role", required = false, defaultValue = "USER") String role) {
 
         User n = new User();
         n.setUsername(name);
         n.setLogin(login);
-//        n.setPassword(NoOpPasswordEncoder.getInstance().encode(password));
         n.setPassword(password);
-        if(trainer_id != null)
+        if (trainer_id != null)
             n.setTrainer(userRepository.findById(Long.valueOf(trainer_id)).get());
         n.setApiKey("123");
-        n.setRole(Role.USER);
+        n.setRole(Role.valueOf(role));
         n.setState(State.ACTIVE);
         userRepository.save(n);
         return "{ status : success }";
@@ -53,7 +55,8 @@ public class UserController {
     String delete(@PathVariable(value = "id") String id) {
         Optional<User> user = userRepository.findById(Long.valueOf(id));
         if (user != null) {
-            return userService.delete(user.get());
+            this.softDelete(user.get());
+            return "{ status : success }";
         } else {
             return "{ status : error, value : can't find user }";
         }
@@ -62,20 +65,21 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
     Iterable<User> getAll() {
-        return userRepository.findAll();
+        return userRepository.findAllByState(State.ACTIVE);
     }
 
     @Transactional
     @PostMapping(path = "/{id}")
     public @ResponseBody
     String edit(@PathVariable(value = "id") String id,
-                            @RequestParam(required = false) String login,
-                            @RequestParam(required = false) String name,
-                            @RequestParam(required = false) String password,
-                            @RequestParam(required = false) String trainer_id) {
+                @RequestParam(required = false) String login,
+                @RequestParam(required = false) String name,
+                @RequestParam(required = false) String password,
+                @RequestParam(required = false) String trainer_id,
+                @RequestParam(required = false) String role) {
         Optional<User> user = userRepository.findById(Long.valueOf(id));
 
-        if (user.isPresent()){
+        if (user.isPresent()) {
 
             if (login != null)
                 user.get().setLogin(login);
@@ -89,6 +93,9 @@ public class UserController {
             if (trainer_id != null)
                 user.get().setTrainer(userRepository.findById(Long.valueOf(trainer_id)).get());
 
+            if (role != null)
+                user.get().setRole(Role.valueOf(role));
+
             userRepository.save(user.get());
             return "{status : success }";
         }
@@ -97,9 +104,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public
-    Optional<User> show(@PathVariable(value = "id") String id) {
-        return userRepository.findById(Long.valueOf(id));
+    public Optional<User> show(@PathVariable(value = "id") String id) {
+        return userRepository.findOneByIdAndState(Long.valueOf(id), State.ACTIVE);
+    }
+
+    @GetMapping("/trainers")
+    public Iterable<User> getTrainers() {
+        return userRepository.findAllByRole(Role.TRAINER);
+    }
+
+
+    private void softDelete(User user) {
+        user.setState(State.DELETED);
+        userRepository.save(user);
     }
 
 }

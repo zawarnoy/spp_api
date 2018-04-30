@@ -6,10 +6,10 @@ import javax.persistence.*;
 
 @MappedSuperclass
 public class SafeDeleteEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    private Long id;
 
     @Enumerated(EnumType.STRING)
     @JsonIgnore
