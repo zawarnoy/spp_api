@@ -1,30 +1,15 @@
 package spp.lab.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import spp.lab.models.SafeDeleteEntity;
 import spp.lab.models.State;
 import spp.lab.reposository.BaseRepository;
 
-import java.util.Optional;
 
-@Service
-@NoRepositoryBean
-public abstract class BaseService<T extends SafeDeleteEntity, Rep extends BaseRepository<T, Long>> {
+public class BaseService<T extends SafeDeleteEntity, Rep extends BaseRepository<T, Long>> {
 
     @Autowired
     protected Rep repository;
-
-    public BaseService()
-    {
-
-    }
 
 
     public String restoreFromTrash(T entity) {

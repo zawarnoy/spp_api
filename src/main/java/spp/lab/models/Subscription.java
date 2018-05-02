@@ -18,6 +18,21 @@ public class Subscription extends SafeDeleteEntity{
 
     private Long duration;
 
+
+    public Subscription()
+    {
+
+    }
+
+    public Subscription(String name, Long visitCount, Long price, Long duration)
+    {
+        this.name = name;
+        this.visitCount = visitCount;
+        this.price = price;
+        this.duration = duration;
+    }
+
+
     public Long getId() {
         return id;
     }

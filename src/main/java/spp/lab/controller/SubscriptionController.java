@@ -1,11 +1,11 @@
-package spp.lab.controllers;
+package spp.lab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import spp.lab.Service.SubscriptionService;
 import spp.lab.models.State;
 import spp.lab.models.Subscription;
-import spp.lab.models.State;
 import spp.lab.reposository.BaseRepository;
 
 import java.util.Optional;
@@ -18,6 +18,10 @@ public class SubscriptionController {
 
     @Autowired
     private BaseRepository<Subscription, Long  > subscriptionRepository;
+
+
+    private SubscriptionService subscriptionService;
+
 
     @RequestMapping(method = RequestMethod.POST)
     public @ResponseBody

@@ -1,12 +1,10 @@
-package spp.lab.controllers;
+package spp.lab.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import spp.lab.models.State;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import spp.lab.Service.UserService;
 import spp.lab.models.Role;
 import spp.lab.models.User;
 import spp.lab.reposository.UserRepository;
@@ -21,7 +19,6 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    private UserService userService = new UserService();
 
     @Transactional
     void save(User user) {
@@ -77,6 +74,7 @@ public class UserController {
                 @RequestParam(required = false) String password,
                 @RequestParam(required = false) String trainer_id,
                 @RequestParam(required = false) String role) {
+
         Optional<User> user = userRepository.findById(Long.valueOf(id));
 
         if (user.isPresent()) {
@@ -106,6 +104,17 @@ public class UserController {
     @GetMapping("/{id}")
     public Optional<User> show(@PathVariable(value = "id") String id) {
         return userRepository.findOneByIdAndState(Long.valueOf(id), State.ACTIVE);
+    }
+
+    @PostMapping("/{id}/delete_trainer")
+    public String delete_trainer(@PathVariable(value = "id") String id) {
+        Optional<User> user = userRepository.findById(Long.valueOf(id));
+        if (user.isPresent()) {
+            user.get().setTrainer(null);
+            userRepository.save(user.get());
+            return "{ status : success }";
+        }
+        return "{ status : can't find user }";
     }
 
     @GetMapping("/trainers")

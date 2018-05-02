@@ -1,6 +1,9 @@
 package spp.lab.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -16,6 +19,10 @@ public class Visit extends SafeDeleteEntity {
     @ManyToOne()
     private User trainer;
 
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+    @Column(name = "created_at")
     private Date created_at;
 
 

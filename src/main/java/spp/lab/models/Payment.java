@@ -1,5 +1,7 @@
 package spp.lab.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -18,13 +20,11 @@ public class Payment extends SafeDeleteEntity {
     @ManyToOne(targetEntity = Subscription.class)
     private Subscription subscription;
 
-    @ManyToOne(targetEntity = User.class)
-    private User admin;
-
     private Long price;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
     @Column(name = "created_at")
     private Date created_at = new Date();
 
@@ -34,14 +34,6 @@ public class Payment extends SafeDeleteEntity {
 
     public void setSubscription(Subscription subscription) {
         this.subscription = subscription;
-    }
-
-    public User getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(User admin) {
-        this.admin = admin;
     }
 
     public Long getPrice() {

@@ -2,10 +2,8 @@ package spp.lab.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.CollectionId;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -19,6 +17,38 @@ public class User extends SafeDeleteEntity{
     private String password;
     private String apiKey;
 
+
+    @OneToOne(targetEntity = UserSubscription.class, mappedBy = "user")
+    @JsonManagedReference
+    private UserSubscription subscription;
+
+
+    public User()
+    {}
+
+    public User(String username, String login, String password, String apiKey, Role role, User trainer)
+    {
+        this.username = username;
+        this.login = login;
+        this.password = password;
+        this.apiKey = apiKey;
+        this.role = role;
+        this.state = (State.ACTIVE);
+        this.trainer = trainer;
+    }
+
+    public User(String username, String login, String password, String apiKey, Role role)
+    {
+        this.username = username;
+        this.login = login;
+        this.password = password;
+        this.apiKey = apiKey;
+        this.role = role;
+        this.state = (State.ACTIVE);
+        this.trainer = null;
+    }
+
+
     @ManyToOne(targetEntity = User.class)
     @JsonManagedReference
     private User trainer;
@@ -26,7 +56,6 @@ public class User extends SafeDeleteEntity{
     @OneToMany(targetEntity = User.class, mappedBy = "trainer")
     @JsonBackReference
     private Set<User> coached;
-
 
     public User getTrainer() {
         return trainer;
@@ -96,5 +125,13 @@ public class User extends SafeDeleteEntity{
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public UserSubscription getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(UserSubscription subscription) {
+        this.subscription = subscription;
     }
 }

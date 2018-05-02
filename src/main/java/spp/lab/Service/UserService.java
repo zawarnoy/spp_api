@@ -7,26 +7,29 @@ import spp.lab.models.User;
 import spp.lab.reposository.UserRepository;
 
 @Service
-public class UserService {
+public class UserService extends BaseService<User, UserRepository>{
 
     @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository rep)
+    {
+        this.repository = rep;
+    }
 
     public String restoreFromTrash(User user) {
         user.setState(State.ACTIVE);
-        userRepository.save(user);
+        repository.save(user);
         return "{ status : success }";
     }
 
     public String delete(User user)
     {
         user.setState(State.DELETED);
-        userRepository.save(user);
+        repository.save(user);
         return "{ status : success }";
     }
 
     public Iterable<User> findAll() {
-        return userRepository.findAllByState(State.ACTIVE);
+        return repository.findAllByState(State.ACTIVE);
     }
 
 

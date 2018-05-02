@@ -1,5 +1,6 @@
-package spp.lab.controllers;
+package spp.lab.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import spp.lab.models.UserSubscription;
 import spp.lab.reposository.BaseRepository;
@@ -11,6 +12,7 @@ import java.util.Optional;
 @RequestMapping(path = "/users_subscriptions")
 public class UserSubscriptionController {
 
+    @Autowired
     BaseRepository<UserSubscription, Long> userSubscriptionRepository;
 
     @GetMapping()

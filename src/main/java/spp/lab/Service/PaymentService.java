@@ -10,5 +10,10 @@ import spp.lab.reposository.PaymentRepository;
 @Service
 public class PaymentService extends BaseService<Payment, PaymentRepository> {
 
+    @Autowired
+    public PaymentService(PaymentRepository rep)
+    {
+        this.repository = rep;
+    }
 }
 

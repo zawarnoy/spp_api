@@ -1,5 +1,8 @@
 package spp.lab.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -11,15 +14,19 @@ public class UserSubscription extends SafeDeleteEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @OneToOne(targetEntity = User.class)
+    @JsonBackReference
     private User user;
-
-    @ManyToOne
-    private Subscription subscription;
 
     private Long available_visits;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+    @Column(name = "created_at")
     private Date end_date;
+
+    public UserSubscription() {
+    }
 
     public User getUser() {
         return user;
@@ -27,14 +34,6 @@ public class UserSubscription extends SafeDeleteEntity {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Subscription getSubscription() {
-        return subscription;
-    }
-
-    public void setSubscription(Subscription subscription) {
-        this.subscription = subscription;
     }
 
     public Long getAvailable_visits() {

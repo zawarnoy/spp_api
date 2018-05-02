@@ -1,4 +1,4 @@
-package spp.lab.controllers;
+package spp.lab.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
