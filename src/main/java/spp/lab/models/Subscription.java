@@ -18,6 +18,7 @@ public class Subscription extends SafeDeleteEntity{
 
     private Long duration;
 
+    private Long purchases;
 
     public Subscription()
     {
@@ -71,5 +72,13 @@ public class Subscription extends SafeDeleteEntity{
 
     public void setDuration(Long duration) {
         this.duration = duration;
+    }
+
+    public Long getPurchases() {
+        return purchases;
+    }
+
+    public void setPurchases(Long purchases) {
+        this.purchases = purchases;
     }
 }

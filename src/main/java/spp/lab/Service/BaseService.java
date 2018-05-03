@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Optional;
 
 
-public class BaseService<T extends SafeDeleteEntity, Rep extends BaseRepository<T, Long>> {
+public abstract class BaseService<T extends SafeDeleteEntity, Rep extends BaseRepository<T, Long>> {
 
     protected Rep repository;
 
