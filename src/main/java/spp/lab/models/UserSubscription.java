@@ -22,7 +22,7 @@ public class UserSubscription extends SafeDeleteEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
-    @Column(name = "created_at")
+    @Column(name = "end_date")
     private Date end_date;
 
     public UserSubscription() {

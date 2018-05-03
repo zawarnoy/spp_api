@@ -9,13 +9,11 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import spp.lab.Service.UserService;
 import spp.lab.config.TestConfig;
 import spp.lab.models.Role;
 import spp.lab.models.User;
 import spp.lab.reposository.UserRepository;
 import spp.lab.models.State;
-import sun.net.ProgressSource;
 
 import java.util.Optional;
 
