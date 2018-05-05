@@ -1,5 +1,6 @@
 package spp.lab.http.controller;
 
+import com.itextpdf.text.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import spp.lab.models.Payment;
@@ -9,6 +10,7 @@ import spp.lab.models.UserSubscription;
 import spp.lab.reposository.BaseRepository;
 import spp.lab.service.PaymentService;
 import spp.lab.service.UserSubscriptionService;
+import spp.lab.service.documentsGeneration.PdfDocumentsGenerationService;
 
 import java.util.Date;
 import java.util.Optional;
@@ -108,5 +110,18 @@ public class PaymentController {
         return paymentService.findByStringId(id);
     }
 
+
+    @GetMapping(path = "/monthly/pdf")
+    public Document getPdfDocs() {
+        PdfDocumentsGenerationService pdfDocumentsGenerationService = new PdfDocumentsGenerationService();
+        Document document = new Document();
+        try {
+//            document = pdfDocumentsGenerationService.create("Kek");
+            document = pdfDocumentsGenerationService.addMonthlyRevenue(document, paymentRepository.findAll());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return document;
+    }
 
 }

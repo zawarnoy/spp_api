@@ -69,7 +69,6 @@
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:5.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.0.5.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.46" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:2.0.1.RELEASE" level="project" />
@@ -93,5 +92,13 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: com.itextpdf:io:7.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
+    <orderEntry type="library" name="Maven: com.itextpdf:kernel:7.1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.itextpdf:itextpdf:5.5.13" level="project" />
+    <orderEntry type="library" name="Maven: com.itextpdf:layout:7.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.poi:poi:3.17" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.11" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.1" level="project" />
   </component>
 </module>

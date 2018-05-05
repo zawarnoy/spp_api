@@ -1,4 +1,5 @@
 package spp.lab.service.documentsGeneration;
 
-public class CsvDocumentsGenerationService extends BaseDocumentsGenerationService {
+public class CsvDocumentsGenerationService {
+
 }

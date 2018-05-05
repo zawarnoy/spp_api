@@ -13,7 +13,10 @@ public class User extends SafeDeleteEntity{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String username;
+
+    @Column(unique = true)
     private String login;
+
     private String password;
     private String apiKey;
 

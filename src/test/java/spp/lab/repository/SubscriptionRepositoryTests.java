@@ -59,16 +59,25 @@ public class SubscriptionRepositoryTests {
     {
         Subscription subscription = subscriptionRepository.save(new Subscription("TestSubscription", (long)5, (long)5, (long)5));
         subscriptionRepository.save(subscription);
-        assertEquals(subscription, subscriptionRepository.findFirstByName("TestSubscription").get().getName());
+        assertEquals(subscription, subscriptionRepository.findFirstByName("TestSubscription").get());
     }
 
     @Test
     @Rollback
-    public void findByLogin()
+    public void findByDuration()
     {
-//        User user = new User("nameForTestBlaBla", "loginForTestBlaBla", "123", "312", Role.USER);
-//        userRepository.save(user);
-//        assertEquals(user.getLogin(), userRepository.findFirstByLogin("loginForTestBlaBla").get().getLogin());
+        Subscription subscription = subscriptionRepository.save(new Subscription("TestSubscription", (long)5, (long)5, (long)5));
+        subscriptionRepository.save(subscription);
+        assertEquals(subscription.getName(), subscriptionRepository.findFirstByDuration((long)5).get().getName());
+    }
+
+    @Test
+    @Rollback
+    public void findByPrice()
+    {
+        Subscription subscription = subscriptionRepository.save(new Subscription("TestSubscription", (long)5, (long)5, (long)5));
+        subscriptionRepository.save(subscription);
+        assertEquals(subscription.getName(), subscriptionRepository.findFirstByPrice((long)5).get().getName());
     }
 
 

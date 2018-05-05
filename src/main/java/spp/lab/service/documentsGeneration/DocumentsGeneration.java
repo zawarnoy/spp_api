@@ -1,17 +1,19 @@
 package spp.lab.service.documentsGeneration;
 
-import org.springframework.core.io.Resource;
+import spp.lab.models.Payment;
 
-public interface DocumentsGeneration {
+public interface DocumentsGeneration<T> {
 
-    public Resource generateMonthlyRevenue();
+    public T addMonthlyRevenue(T document, Iterable<Payment> payments) throws Exception;
 
-    public Resource generateYearlyRevenue();
+    public void addYearlyRevenue(T document, Iterable<Payment> payments) throws Exception;
 
-    public Resource generateTopTenTrainersInLastMonth();
+    public void addTopTenTrainersInLastMonth(T document) throws Exception;
 
-    public Resource generateTopTenTrainersInYear();
+    public void addTopTenTrainersInYear(T document) throws Exception;
 
-    public Resource generateTopTenSubscriptions();
+    public void addTopTenUsers(T document) throws Exception;
+
+    public T create(String name) throws Exception;
 
 }
