@@ -1,32 +1,101 @@
 package spp.lab.service.documentsGeneration;
 
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import org.springframework.core.io.ClassPathResource;
 import spp.lab.models.Payment;
+import spp.lab.models.User;
+import spp.lab.service.documentsGeneration.utils.CSVUtils;
 
-import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class CsvDocumentsGenerationService extends BaseDocumentsGenerationService {
 
     private final String repositoryPath = "\\docs\\csv\\";
 
+    private final CSVUtils utils = new CSVUtils();
+
     private String generateCsvName(String pathToFolder, String caption) {
         return this.generateFilename(pathToFolder, this.repositoryPath, caption) + ".csv";
     }
 
-    public String generatePaymentCsv(String pathToFolder, Payment payment) throws IOException {
-        CsvMapper mapper = new CsvMapper();
+    public String generatePaymentsCsv(String pathToFolder, Iterable<Payment> payments) throws IOException {
 
-        File file = null;
+        String fileName = generateCsvName(pathToFolder, "Payments");
 
-        CsvSchema bootstrapSchema = CsvSchema.emptySchema().withHeader();
-        file = new ClassPathResource(pathToFolder + this.repositoryPath + "123.csv").getFile();
+        FileWriter writer = new FileWriter(fileName);
 
-        mapper.writer().with(bootstrapSchema).writeValue(file, payment);
-        return pathToFolder + this.repositoryPath + "123.csv";
+        CSVUtils.writeLine(writer, Arrays.asList("user_id", "subscription_id", "price", "created_at", "state"));
 
+        payments.forEach(payment -> {
+            try {
+                CSVUtils.writeLine(writer, Arrays.asList(
+                        payment.getUser().getId().toString(),
+                        payment.getSubscription().getId().toString(),
+                        payment.getPrice().toString(),
+                        payment.getCreated_at().toString(),
+                        payment.getState().toString()
+                ));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        writer.flush();
+        writer.close();
+
+
+        return fileName;
     }
 
+    public String generatePaymentCsv(String pathToFolder, Payment payment) throws IOException {
+
+        String fileName = generateCsvName(pathToFolder, "Payments");
+
+        FileWriter writer = new FileWriter(fileName);
+
+        CSVUtils.writeLine(writer, Arrays.asList("user_id", "subscription_id", "price", "created_at", "state"));
+
+        CSVUtils.writeLine(writer, Arrays.asList(
+                payment.getUser().getId().toString(),
+                payment.getSubscription().getId().toString(),
+                payment.getPrice().toString(),
+                payment.getCreated_at().toString(),
+                payment.getState().toString()
+        ));
+
+        return fileName;
+    }
+
+
+    public String generateUsersCsv(String pathToFolder, Iterable<User> users) throws IOException {
+
+        String fileName = generateCsvName(pathToFolder, "Users");
+
+        FileWriter writer = new FileWriter(fileName);
+
+        CSVUtils.writeLine(writer, Arrays.asList("username", "login", "password", "apiKey", "role", "trainer_id"));
+
+        users.forEach(user -> {
+            try {
+                CSVUtils.writeLine(writer, Arrays.asList(
+                        user.getUsername(),
+                        user.getLogin(),
+                        user.getPassword(),
+                        user.getApiKey(),
+                        user.getRole().toString(),
+                        user.getTrainer().getId().toString()
+                ));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        writer.flush();
+        writer.close();
+
+
+        return fileName;
+    }
 }
