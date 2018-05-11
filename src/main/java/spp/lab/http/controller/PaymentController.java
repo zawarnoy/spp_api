@@ -1,10 +1,6 @@
 package spp.lab.http.controller;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,15 +16,9 @@ import spp.lab.service.UserSubscriptionService;
 import spp.lab.service.documentsGeneration.CsvDocumentsGenerationService;
 import spp.lab.service.documentsGeneration.PdfDocumentsGenerationService;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Optional;
-
-import static com.itextpdf.kernel.pdf.PdfName.Data;
 
 @CrossOrigin
 @RestController
@@ -97,31 +87,6 @@ public class PaymentController {
     Iterable<Payment> getAll() {
         return paymentRepository.findAll();
     }
-
-//    @Transactional()
-//    @RequestMapping(method = RequestMethod.POST, path = "/{id}")
-//    public @ResponseBody
-//    String edit(@PathVariable(value = "id") String id,
-//                @RequestParam String subscription_id,
-//                @RequestParam String user_id) {
-//
-//        Optional<Payment> payment = paymentRepository.findById(Long.valueOf(id));
-//
-//        if (payment.isPresent()) {
-//
-//            if (subscription_id != null) {
-//                payment.get().setSubscription(subscriptionRepository.findById(Long.valueOf(subscription_id)).get());
-//                payment.get().setPrice(subscriptionRepository.findById(Long.valueOf(subscription_id)).get().getPrice());
-//            }
-//
-//            if (user_id != null)
-//                payment.get().setUser(userRepository.findById(Long.valueOf(user_id)).get());
-//            paymentRepository.save(payment.get());
-//            return "{ status : success }";
-//        }
-//
-//        return "{ status : error }";
-//    }
 
     @RequestMapping("/{id}")
     Optional<Payment> show(@PathVariable(value = "id") String id) {
@@ -206,18 +171,62 @@ public class PaymentController {
 
 
     @GetMapping(path = "/{id}.csv")
-    public String getCsvPayment(@PathVariable(value = "id") String id) {
+    public ResponseEntity<byte[]> getCsvPayment(@PathVariable(value = "id") String id) {
         String project_path = System.getProperty("user.dir");
+
+        Date date = new Date();
+        String webFileName = String.valueOf(date.getTime());
 
         Optional<Payment> payment = paymentService.findByStringId(id);
         String path = null;
+
+        byte[] data = null;
+        String fileName = null;
+        
+
         try {
-            path = csvDocumentsGenerationService.generatePaymentCsv(project_path, payment.get());
+            fileName = csvDocumentsGenerationService.generatePaymentCsv(project_path, payment.get());
+            data = pdfDocumentsGenerationService.getBytesFromFilename(fileName);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return path;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("application/csv"));
+        headers.setContentDispositionFormData("file", "AllAcivePayments" + webFileName + ".csv");
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return new ResponseEntity<byte[]>(data, headers, HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = ".csv")
+    public ResponseEntity<byte[]> getCsvPayments(@PathVariable(value = "id") String id) {
+        String project_path = System.getProperty("user.dir");
+
+        byte[] data = null;
+        String fileName = null;
+
+        Date date = new Date();
+        String webFileName = String.valueOf(date.getTime());
+
+        Iterable<Payment> payments = paymentService.findAllActive();
+        String path = null;
+        try {
+            fileName = csvDocumentsGenerationService.generatePaymentsCsv(project_path, payments);
+            data = pdfDocumentsGenerationService.getBytesFromFilename(fileName);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("application/csv"));
+        headers.setContentDispositionFormData("file", "AllAcivePayments" + webFileName + ".csv");
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return new ResponseEntity<byte[]>(data, headers, HttpStatus.OK);
     }
 
 }
