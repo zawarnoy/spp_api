@@ -4,16 +4,15 @@ import spp.lab.models.Payment;
 
 public interface DocumentsGeneration<T> {
 
-    public T addMonthlyRevenue(T document, Iterable<Payment> payments) throws Exception;
+    public T generateMonthlyRevenue(T document, Iterable<Payment> payments) throws Exception;
 
-    public void addYearlyRevenue(T document, Iterable<Payment> payments) throws Exception;
+    public void generateYearlyRevenue(T document, Iterable<Payment> payments) throws Exception;
 
-    public void addTopTenTrainersInLastMonth(T document) throws Exception;
+    public void generateTopTenTrainersInLastMonth(T document) throws Exception;
 
-    public void addTopTenTrainersInYear(T document) throws Exception;
+    public void generateTopTenTrainersInYear(T document) throws Exception;
 
-    public void addTopTenUsers(T document) throws Exception;
+    public void generateTopTenUsers(T document) throws Exception;
 
-    public T create(String name) throws Exception;
 
 }
